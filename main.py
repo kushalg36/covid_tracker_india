@@ -25,7 +25,7 @@ table_content = soup.find_all('table', class_='table table-striped table-dark')
 
 mentioned_table = table_content[-1]
 mentioned_rows = mentioned_table.find_all('tr')
-mentioned_rows = mentioned_rows[1:]
+mentioned_rows = mentioned_rows[1:-1]
 
 data = []
 

@@ -1,6 +1,0 @@
-2020-03-26 16:56:49,394 Starting new HTTPS connection (1): www.mohfw.gov.in:443
-2020-03-26 16:56:49,843 https://www.mohfw.gov.in:443 "GET / HTTP/1.1" 200 8983
-2020-03-26 16:59:34,706 Starting new HTTPS connection (1): www.mohfw.gov.in:443
-2020-03-26 16:59:35,121 https://www.mohfw.gov.in:443 "GET / HTTP/1.1" 200 8983
-2020-03-26 16:59:40,770 Starting new HTTPS connection (1): www.mohfw.gov.in:443
-2020-03-26 16:59:41,131 https://www.mohfw.gov.in:443 "GET / HTTP/1.1" 200 8983

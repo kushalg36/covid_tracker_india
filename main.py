@@ -3,6 +3,7 @@ import requests
 from tabulate import tabulate
 import json
 import logging
+from slack import slack
 
 logging.basicConfig(format='%(asctime)s %(message)s',filename='program_logs.log',level=logging.DEBUG,filemode='a')
 def func(row):
@@ -17,7 +18,7 @@ def load():
         res = json.load(f)
     return res
 
-header = ['Name of State / UT','Confirmed cases(Indian National)','Confirmed cases(Foreign National)','Cured','Death']
+header = ['State/UT','Confirmed cases(Indian)','Confirmed cases(Foreign)','Cured','Death']
 
 
 
@@ -66,13 +67,19 @@ if __name__ == '__main__':
             save(prev_data)
 
         table = tabulate(data,headers=header,tablefmt='psql')
-        print(table)
+        # print(table)
 
         event_info = ''
         for event in info:
             logging.warning(event)
             event_info += '\n - ' + event.replace("'","")
 
-        print(event_info)
+        # print(event_info)
+        text = f'Corona Virus update in India till now:\n{event_info}\n```{table}```'
+        slack()(text)
+        # print(text)
     except Exception as e:
         logging.exception('script got failed.')
+        slack()(f'Exception occured: [{e}]')
+
+

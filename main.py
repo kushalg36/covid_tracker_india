@@ -5,20 +5,22 @@ import json
 import logging
 from slack import slack
 
-logging.basicConfig(format='%(asctime)s %(message)s',filename='program_logs.log',level=logging.DEBUG,filemode='a')
+PATH  = 'C:/Users/kusha/OneDrive/Desktop/project/corona_tracker/'
+
+logging.basicConfig(format='%(asctime)s %(message)s',filename=PATH + 'program_logs.log',level=logging.DEBUG,filemode='a')
 def func(row):
     return [x.get_text().replace('\n','') for x in row]
 
 def save(data):
-    with open('data.json','w') as f:
+    with open('C:/Users/kusha/OneDrive/Desktop/project/corona_tracker/data.json','w') as f:
         json.dump(data,f)
 
 def load():
-    with open('data.json','r') as f:
+    with open('C:/Users/kusha/OneDrive/Desktop/project/corona_tracker/data.json','r') as f:
         res = json.load(f)
     return res
 
-header = ['State/UT','Confirmed cases(Indian)','Confirmed cases(Foreign)','Cured','Death']
+header = ['State/UT','Indian','Foreign','Cured','Death']
 
 
 
@@ -36,9 +38,14 @@ if __name__ == '__main__':
 
         data = []
 
+        state_shorts = {'Andaman and Nicobar Islands':'Andaman','Andhra Pradesh':'Andhra','Himachal Pradesh':'HP','Jammu and Kashmir':'J & K','Madhya Pradesh':'MP','Tamil Nadu':'TN','Uttar Pradesh':'UP','Chhattisgarh':'CG','Maharashtra':'MH'}
+
         for row in mentioned_rows:
             rows = func(row.find_all('td'))
+            if(rows[1] in state_shorts):
+                rows[1] = state_shorts[rows[1]]
             if(len(rows) == 5):
+                rows[0] = 'Total'
                 data.append(rows)
             else:
                 data.append(rows[1:])
@@ -67,17 +74,18 @@ if __name__ == '__main__':
             save(prev_data)
 
         table = tabulate(data,headers=header,tablefmt='psql')
-        # print(table)
 
         event_info = ''
         for event in info:
             logging.warning(event)
             event_info += '\n - ' + event.replace("'","")
 
-        # print(event_info)
-        text = f'Corona Virus update in India till now:\n{event_info}\n```{table}```'
-        slack()(text)
-        # print(text)
+        logging.warning(f'{flag_change} -------- outside condition')
+        text = f'Corona Virus update in India till now:\n{event_info}\n ```{table}```'
+        if flag_change:
+            logging.warning(f'{flag_change} -------- inside condition')
+            slack()(text)
+
     except Exception as e:
         logging.exception('script got failed.')
         slack()(f'Exception occured: [{e}]')

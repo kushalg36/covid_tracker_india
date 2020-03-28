@@ -4,6 +4,7 @@ from tabulate import tabulate
 import json
 import logging
 from slack import slack
+from telegram import telegram_bot_sendtext
 
 PATH  = 'C:/Users/kusha/OneDrive/Desktop/project/corona_tracker/'
 
@@ -82,6 +83,7 @@ if __name__ == '__main__':
 
         logging.warning(f'{flag_change} -------- outside condition')
         text = f'Corona Virus update in India till now:\n{event_info}\n ```{table}```'
+        telegram_bot_sendtext(text)
         if flag_change:
             logging.warning(f'{flag_change} -------- inside condition')
             slack()(text)
